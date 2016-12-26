@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>Scroll News</title>
 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/scrollNews.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+
 
     <style>
         .image{
@@ -23,17 +25,27 @@
             position: relative;
         }
         .slider > .slide{
+            position: fixed;
+            width: 1100px;
             box-shadow: 0 0  5px #111;
+            background: #fff;
+            display: none;
+        }
+        .slider > .slide.current{
+            position: absolute;
+            z-index: 9999;
+            display: block;
         }
     </style>
+
 </head>
 <body>
 <div class="container">
 
     <div class="slider">
-        <div class="slide p-1 mb-1">
+        <div class="slide current p-1 mb-1">
 
-            <h4>Lorem Ipsum</h4>
+            <h4>Cars. Lorem Ipsum</h4>
             <div class="group-image mt-2 mb-2">
                 <div class="col-md-4 pl-0 image"><img src="images/foto2.png"></div>
                 <div class="col-md-4 pl-0 image"><img src="images/foto19.png"></div>
@@ -92,7 +104,7 @@
         </div>
         <div class="slide p-1 mb-1">
 
-            <h4>Lorem ipsum dolor sit amet</h4>
+            <h4>Winter. Lorem ipsum dolor sit amet</h4>
             <div class="group-image mt-2 mb-2">
                 <div class="col-md-4 pl-0 image"><img src="images/472004.jpg"></div>
                 <div class="col-md-4 pl-0 image"><img src="images/34959425.jpg"></div>
