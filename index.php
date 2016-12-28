@@ -1,13 +1,37 @@
+<?php
+    include_once 'php/CheckOldBrowser/useragent.php';
+    include_once 'php/CheckOldBrowser/CheckBrowser.php';
+
+
+    $userAgent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
+
+    $myBrowser = checkBrowser($userAgent->getBrowser(),$userAgent->getVersion());
+
+    if($myBrowser === true){
+        include_once 'php/CheckOldBrowser/oldView.php';
+        die;
+    }
+
+    echo $userAgent->getBrowser().' '.$userAgent->getVersion();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Scroll News</title>
 
+
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
     <script src="js/scrollNews.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 
+    <!--[if IE 8]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="js/media.js"></script>
+    <![endif]-->
 
     <style>
         .image{
@@ -29,17 +53,19 @@
             width: 1100px;
             box-shadow: 0 0  5px #111;
             background: #fff;
-            display: none;
         }
         .slider > .slide.current{
             position: absolute;
-            z-index: 9999;
-            display: block;
+            z-index: 9998;
         }
     </style>
 
+
 </head>
 <body>
+
+<script type="text/javascript" src="https://yastatic.net/browser-updater/v1/script.js" charset="utf-8"></script><script>var yaBrowserUpdater = new ya.browserUpdater.init({"lang":"ru","browsers":{"yabrowser":"15.12","chrome":"50","ie":"10","opera":"37","safari":"8","fx":"46","iron":"35","flock":"Infinity","palemoon":"25","camino":"Infinity","maxthon":"4.5","seamonkey":"2.3"},"theme":"red"});</script>
+
 <div class="container">
 
     <div class="slider">

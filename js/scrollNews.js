@@ -17,7 +17,7 @@ $(document).ready(function () {
     selector.after('<div style="height: '+height+'px"></div>');
 
     //Конец текущего и начало следующего слайда
-    var top = height_current ;
+    var top = height_current +10;
 
     window.onscroll = (function() {
 
@@ -25,7 +25,10 @@ $(document).ready(function () {
         var scrolled = window.pageYOffset || document.documentElement.scrollTop;
 
         if(scrolled > 0){
-            next.css('display','block');
+            var  z_n = 9998 - 1,
+                 z_p = 9998 + 1;
+            next.css({'top': 0, 'z-index': z_n});
+            prev.css({'z-index': z_p});
         }
 
         // Меняем класс .current если текущий класс вышел за пределы видимости окна и вешаем его на следующий слайд
@@ -35,8 +38,7 @@ $(document).ready(function () {
             next.addClass('current');
         }
 
-
-        console.log(scrolled);
+        //console.log(scrolled);
 
     });
 
