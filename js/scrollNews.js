@@ -1,45 +1,194 @@
+var news = [],
+    start = 1,
+    index = start,
+    inProgress = false,
+    height = 0;
+
 $(document).ready(function () {
 
     var selector = $('.slider');
 
-    // Слайды текущий, следующий, предыдущий
-    var current        = selector.find('.current'),
-        next           = current.next('.slide'),
-        prev           = current.prev('.slide');
+    /*if(index == start){
+        getNews(index, function(){
 
-    //Опредилим высоту текущего, следующего и предыдущего слайда
-    var height_current = current.height(),
-        height_next    = next.height(),
-        height_prev    = prev.height();
+            index++;
 
-    //Увеливаем скролл
-    var height         = height_current + height_next;
-    selector.after('<div style="height: '+height+'px"></div>');
+            appendNews(selector);
 
-    //Конец текущего и начало следующего слайда
-    var top = height_current +10;
 
-    window.onscroll = (function() {
 
-        //Считаем высоту скролла
-        var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+        });
 
-        if(scrolled > 0){
-            var  z_n = 9998 - 1,
-                 z_p = 9998 + 1;
-            next.css({'top': 0, 'z-index': z_n});
-            prev.css({'z-index': z_p});
+    }*/
+
+     $(window).scroll(function() {
+
+        if($(window).scrollTop() + $(window).height() >= $(document).height() - 200 && !inProgress) {
+
+
+            getNews(index, function(){
+
+                index++;
+
+                //appendNews(selector);
+
+
+            });
+
         }
-
-        // Меняем класс .current если текущий класс вышел за пределы видимости окна и вешаем его на следующий слайд
-        if(scrolled > height_current){
-            next.css('top',top+'px'); // Не катаем слайд вместе с текущим
-            current.removeClass('current');
-            next.addClass('current');
-        }
-
-        //console.log(scrolled);
 
     });
 
-})
+    window.onscroll = (function() {
+
+        var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+
+
+        if(news.length > 0){
+
+            item = news[index-1];
+
+            selector.append(
+                '<div class="slide p-1 mb-1" id="'+ item.id +'">' +
+                '<h4>'+ item.title +'</h4>'+
+                '<h5>'+ item.date +' </h5>'+
+                '<div class="group-image mt-2 mb-2">'+
+                '<div class="col-md-4 pl-0 image"><img src="images/foto2.png"></div>'+
+                '<div class="col-md-4 pl-0 image"><img src="images/foto19.png"></div>'+
+                '<div class="col-md-4 pl-0 image"><img src="images/1227635_drift-japan.jpg"></div>'+
+                '<div class="clearfix"></div>'+
+                '</div>'+
+                '<div class="text">'+ item.text +'</div>'+
+                '<div class="group-image mt-2 mb-2">'+
+                '<div class="col-md-4 pl-0 image"><img src="images/foto2.png"></div>'+
+                '<div class="col-md-4 pl-0 image"><img src="images/foto19.png"></div>'+
+                '<div class="col-md-4 pl-0 image"><img src="images/1227635_drift-japan.jpg"></div>'+
+                '<div class="clearfix"></div>'+
+                '</div>'+
+                '</div>'
+            );
+
+            var current = selector.find('.current'),
+                next = current.next('div.slide'),
+                hgt         = current.height() + next.height();
+
+            height += current.height();
+
+            if(scrolled >= current.height()) selector.after('<div style="height: '+hgt+'px"></div>');
+
+
+
+             /* var scrolled = $(window).scrollTop();
+
+             if(scrolled > height){
+
+             selector.find('.current').removeClass('current');
+             next.addClass('current');
+
+             $('title').html(item.title);
+             history.pushState(',',item.title,'?url='+item.url);
+             }*/
+
+            console.log(height + ' '+ scrolled);
+
+            /*
+             */
+
+        }
+
+
+
+    });
+
+
+
+});
+
+function getNews(index,callback) {
+
+    $.ajax({
+        url: 'php/news/get.php',
+        method: 'POST',
+        data: {"item": index},
+        beforeSend: function () {
+            inProgress = true;
+        }
+    }).done(function (data) {
+
+        var obj = jQuery.parseJSON(data);
+
+        if (obj.length > 0) {
+
+            for (var i in obj) {
+
+                var th = obj[i];
+                news[index] = {
+                    id: th.id,
+                    title: th.title,
+                    text: th.text,
+                    date: th.date,
+                    url: th.url
+                };
+            }
+        }
+
+        inProgress = false;
+
+        if (callback) callback();
+
+
+    });
+
+}
+
+function appendNews(selector){
+
+    if(news.length > 0){
+
+        item = news[index-1];
+
+        selector.append(
+            '<div class="slide p-1 mb-1" id="'+ item.id +'">' +
+            '<h4>'+ item.title +'</h4>'+
+            '<h5>'+ item.date +' </h5>'+
+            '<div class="group-image mt-2 mb-2">'+
+            '<div class="col-md-4 pl-0 image"><img src="images/foto2.png"></div>'+
+            '<div class="col-md-4 pl-0 image"><img src="images/foto19.png"></div>'+
+            '<div class="col-md-4 pl-0 image"><img src="images/1227635_drift-japan.jpg"></div>'+
+            '<div class="clearfix"></div>'+
+            '</div>'+
+            '<div class="text">'+ item.text +'</div>'+
+            '<div class="group-image mt-2 mb-2">'+
+            '<div class="col-md-4 pl-0 image"><img src="images/foto2.png"></div>'+
+            '<div class="col-md-4 pl-0 image"><img src="images/foto19.png"></div>'+
+            '<div class="col-md-4 pl-0 image"><img src="images/1227635_drift-japan.jpg"></div>'+
+            '<div class="clearfix"></div>'+
+            '</div>'+
+            '</div>'
+        );
+
+
+        var current = selector.find('.current'),
+            next = current.next('div.slide'),
+            hgt         = current.height() + next.height();
+
+        height += current.height();
+
+        selector.after('<div style="height: '+hgt+'px"></div>');
+
+        var scrolled = $(window).scrollTop();
+
+        if(scrolled > height){
+
+            selector.find('.current').removeClass('current');
+            next.addClass('current');
+
+            $('title').html(item.title);
+            history.pushState(',',item.title,'?url='+item.url);
+        }
+
+        console.log(height + ' '+ scrolled);
+
+    }
+
+}

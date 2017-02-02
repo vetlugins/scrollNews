@@ -1,0 +1,1 @@
+DB. Подключение невозможно: Access denied for user 'admin'@'localhost' (using password: NO)
