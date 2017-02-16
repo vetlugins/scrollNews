@@ -1,17 +1,6 @@
 <?php
-    include_once 'php/CheckOldBrowser/useragent.php';
-    include_once 'php/CheckOldBrowser/CheckBrowser.php';
+
     include_once 'php/db/database.php';
-
-    $userAgent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
-
-    $myBrowser = checkBrowser($userAgent->getBrowser(),$userAgent->getVersion());
-
-
-    if($myBrowser === true){
-        include_once 'php/CheckOldBrowser/oldView.php';
-        die;
-    }
 
     if($_GET and !empty($_GET['url'])){
         $news = $db->SelectRow("SELECT * FROM news WHERE url='".$_GET['url']."'");
@@ -28,16 +17,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?php echo $news->title ?></title>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
 
     <script src="js/scrollNews.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
-    <!--[if IE 8]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <script src="js/media.js"></script>
-    <![endif]-->
 
     <style>
         .image{
@@ -54,17 +38,24 @@
             position: relative;
         }
         .slider > .slide{
-            position: fixed;
+            /*position: fixed;*/
             width: 1100px;
             box-shadow: 0 0  5px #111;
             background: #fff;
         }
-        .slider > .slide.current{
+        /*.slider > .slide.current{
             position: absolute;
             z-index: 9998;
-        }
+        }*/
         .slider > .slide .text img{
             display: none;
+        }
+        .dark{
+            position: absolute;
+            background: #111111;
+        }
+        .visible{
+            opacity:1;
         }
 
     </style>
@@ -77,7 +68,7 @@
 
     <div class="slider">
         <?php
-        echo '<div class="slide current p-1 mb-1" id="'.$news->id.'">
+        echo '<div class="slide current p-1 mb-1" data-id="'.$news->id.'" data-url="'.$news->url.'">
                     <h4>'.$news->title.'</h4>
                     <h5>'.$news->date.'</h5>
                     <div class="group-image mt-2 mb-2">
